@@ -4,9 +4,10 @@ import React, { ReactNode, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars, FaTimes, FaHome, FaSignOutAlt } from "react-icons/fa";
-import { SlUserFollow, SlUserFollowing } from "react-icons/sl";
+import { SlUserFollowing } from "react-icons/sl";
 import { BsFilePost } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai"; // Import down arrow icon
+import { GoProjectTemplate } from "react-icons/go";
 
 type LayoutProps = {
   children: ReactNode;
@@ -28,12 +29,12 @@ const UserDashboardLayout = ({ children }: LayoutProps) => {
       ],
     },
     {
-      name: "Following",
-      href: "/dashboard/following",
-      icon: <SlUserFollow />,
+      name: "Project",
+      href: "/dashboard",
+      icon: <GoProjectTemplate />,
       children: [
-        { name: "People You Follow", href: "/dashboard/following/people" },
-        { name: "Groups", href: "/dashboard/following/groups" },
+        { name: "Projects", href: "/dashboard/projects" },
+        { name: "Create Project", href: "/dashboard/create-project" },
       ],
     },
     {
@@ -56,13 +57,13 @@ const UserDashboardLayout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen">
       {/* Hamburger Icon for Mobile */}
       <button
         className="text-black text-2xl p-2 absolute top-1 left-0 z-50 md:hidden"
         onClick={toggleSidebar}
       >
-        {isOpen ? <FaTimes className="hidden" /> : <FaBars />}
+        {isOpen ? <FaTimes /> : <FaBars />}
       </button>
 
       {/* Sidebar */}
@@ -162,7 +163,7 @@ const UserDashboardLayout = ({ children }: LayoutProps) => {
       )}
 
       {/* Main content area */}
-      <main className="flex-1 p-8 bg-gray-100">{children}</main>
+      <main className="flex-1 p-8 bg-gray-100 overflow-y-auto">{children}</main>
     </div>
   );
 };

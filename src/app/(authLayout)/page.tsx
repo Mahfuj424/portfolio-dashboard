@@ -16,7 +16,7 @@ export default function LoginForm() {
   const user = useUser();
 
   if (user) {
-    router.push("/dashboard");
+    router.push("/dashboard/blogs");
   }
 
   useEffect(() => {
