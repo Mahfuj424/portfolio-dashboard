@@ -211,6 +211,7 @@ export default function PortfolioProjectForm() {
             <option value="javascript">Javascript</option>
             <option value="landing-page">Landing Page</option>
             <option value="portfolio">Portfolio</option>
+            <option value="portfolio">Social Media</option>
             <option value="service">Service</option>
           </select>
         </div>

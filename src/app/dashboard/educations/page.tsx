@@ -1,121 +1,102 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import {
-  useDeleteProjectMutation,
-  useGetAllProjectQuery,
-} from "@/redux/api/project";
-import Link from "next/link";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
+import toast from "react-hot-toast";
+import {
+  useDeleteEducationMutation,
+  useGetAllEducationQuery,
+} from "@/redux/api/education";
+import EducationUpdateForm from "./EducationUpdateForm";
 
-const AllProjects = () => {
-  const { data } = useGetAllProjectQuery({});
-  const projectData = data?.data;
+const AllEducationPage = () => {
+  const { data } = useGetAllEducationQuery({});
+  const educationData = data?.data;
 
-  //   delete project
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedEducation, setSelectedEducation] = useState<any>(null);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null);
+  const [deleteEducation] = useDeleteEducationMutation();
 
-  const [deleteProject] = useDeleteProjectMutation();
-
-  const handleDeletePost = (id: string) => {
-    setPostIdToDelete(id);
-    setIsModalOpen(true);
+  const handleDeleteEducation = (id: string) => {
+    setSelectedEducation(id);
+    setIsDeleteModalOpen(true);
   };
 
-  const confirmDeletePost = async () => {
-    if (!postIdToDelete) return;
+  const confirmDeleteEducation = async () => {
+    if (!selectedEducation) return;
 
     try {
-      const res = await deleteProject(postIdToDelete).unwrap();
-      toast.success(res?.message);
+      const res = await deleteEducation(selectedEducation).unwrap();
+      toast.success(res?.message || "Education deleted successfully!");
     } catch (error: any) {
-      toast.error(error?.message || "Error deleting post.");
+      toast.error(error?.message || "Error deleting education.");
     } finally {
-      setIsModalOpen(false);
-      setPostIdToDelete(null);
+      setIsDeleteModalOpen(false);
+      setSelectedEducation(null);
     }
   };
 
   const cancelDelete = () => {
-    setIsModalOpen(false);
-    setPostIdToDelete(null);
+    setIsDeleteModalOpen(false);
+    setSelectedEducation(null);
+  };
+
+  const openEditModal = (education: any) => {
+    setSelectedEducation(education);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedEducation(null);
   };
 
   return (
-    <div>
+    <div className="overflow-x-auto mx-auto">
       <table className="min-w-full bg-white border-gray-200">
         <thead className="border-y-2">
           <tr>
             <th className="p-4 text-center font-bold text-gray-700">SL</th>
-            <th className="p-4 text-center font-bold text-gray-700">Name</th>
             <th className="p-4 text-center font-bold text-gray-700">
-              Category
+              Education Name
             </th>
             <th className="p-4 text-center font-bold text-gray-700">
-              Live Link
+              Department
             </th>
             <th className="p-4 text-center font-bold text-gray-700">
-              Server Repo
-            </th>
-            <th className="p-4 text-center font-bold text-gray-700">
-              Client Repo
+              Duration
             </th>
             <th className="p-4 text-center font-bold text-gray-700">Action</th>
           </tr>
         </thead>
         <tbody>
-          {projectData?.map((item: any, index: number) => (
+          {educationData?.map((item: any, index: number) => (
             <tr key={item?._id} className="bg-white border-b text-center">
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {index + 1}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item?.name}
+                {item?.educationName}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {item?.category}
+                {item?.department}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <Link
-                  className="text-blue-500"
-                  target="_blank"
-                  href={`${item?.liveLink}`}
-                >
-                  Project
-                </Link>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <Link
-                  className="text-blue-500"
-                  target="_blank"
-                  href={`${item?.serverRepo}`}
-                >
-                  Repo
-                </Link>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <Link
-                  className="text-blue-500"
-                  target="_blank"
-                  href={`${item?.clientRepo}`}
-                >
-                  Repo
-                </Link>
+                {item?.duration}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <div className="flex gap-5 justify-center">
-                  <Link
-                    href={`/dashboard/projects/${item?._id}`}
-                    className="flex items-center text-green-500 hover:text-green-700 transition duration-300"
+                  <button
+                    onClick={() => openEditModal(item)}
+                    className="flex items-center text-blue-500 hover:text-blue-700 transition duration-300"
                   >
                     <FaRegEdit className="mr-1" /> Edit
-                  </Link>
+                  </button>
                   <button
-                    onClick={() => handleDeletePost(item?._id)}
+                    onClick={() => handleDeleteEducation(item?._id)}
                     className="flex items-center text-red-500 hover:text-red-700 transition duration-300"
                   >
                     <RiDeleteBinLine className="mr-1" /> Delete
@@ -127,16 +108,16 @@ const AllProjects = () => {
         </tbody>
       </table>
 
-      {/* Confirmation Modal */}
-      {isModalOpen && (
+      {/* Confirmation Modal for Delete */}
+      {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-lg">
             <h2 className="text-lg font-semibold mb-4">
-              Are you sure you want to delete this project?
+              Are you sure you want to delete this education entry?
             </h2>
             <div className="flex justify-end space-x-4">
               <button
-                onClick={confirmDeletePost}
+                onClick={confirmDeleteEducation}
                 className="px-4 py-2 bg-red-500 text-white rounded"
               >
                 Confirm
@@ -151,8 +132,20 @@ const AllProjects = () => {
           </div>
         </div>
       )}
+
+      {/* Edit Modal */}
+      {isEditModalOpen && selectedEducation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg w-[900px]">
+            <EducationUpdateForm
+              educationData={selectedEducation}
+              onClose={closeEditModal}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default AllProjects;
+export default AllEducationPage;

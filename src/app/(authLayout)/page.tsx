@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@/utils/user";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FiMail, FiLock, FiLoader } from "react-icons/fi";
@@ -12,12 +11,6 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
-
-  const user = useUser();
-
-  if (user) {
-    router.push("/dashboard/blogs");
-  }
 
   useEffect(() => {
     setIsClient(true);
@@ -36,11 +29,14 @@ export default function LoginForm() {
 
     try {
       const body = { email, password };
-      const res = await fetch("http://localhost:5000/api/v1/auth/login", {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const res = await fetch(
+        "https://portfolio-backend-eight-black.vercel.app/api/v1/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
 
       if (!res.ok) {
         throw new Error("Failed to login");
@@ -48,6 +44,9 @@ export default function LoginForm() {
 
       const data = await res.json();
       localStorage.setItem("user", JSON.stringify(data)); // Store user data in localStorage
+      if (data.success === true) {
+        router.push("/dashboard/blogs");
+      }
       console.log("Login successful", data); // Optional: Log data for debugging
     } catch (err) {
       console.error("Login error:", err);

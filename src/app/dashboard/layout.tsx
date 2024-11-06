@@ -4,10 +4,11 @@ import React, { ReactNode, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars, FaTimes, FaHome, FaSignOutAlt } from "react-icons/fa";
-import { SlUserFollowing } from "react-icons/sl";
 import { BsFilePost } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai"; // Import down arrow icon
 import { GoProjectTemplate } from "react-icons/go";
+import { MdCastForEducation } from "react-icons/md";
+import { GiSkills } from "react-icons/gi";
 
 type LayoutProps = {
   children: ReactNode;
@@ -33,18 +34,33 @@ const UserDashboardLayout = ({ children }: LayoutProps) => {
       href: "/dashboard",
       icon: <GoProjectTemplate />,
       children: [
-        { name: "Projects", href: "/dashboard/projects" },
+        { name: "All Projects", href: "/dashboard/projects" },
         { name: "Create Project", href: "/dashboard/create-project" },
       ],
     },
     {
-      name: "Followers",
-      href: "/dashboard/followers",
-      icon: <SlUserFollowing />,
+      name: "Education",
+      href: "/dashboard",
+      icon: <MdCastForEducation />,
       children: [
-        { name: "Recent Followers", href: "/dashboard/followers/recent" },
-        { name: "Top Followers", href: "/dashboard/followers/top" },
+        { name: "Educations", href: "/dashboard/educations" },
+        { name: "Create Education", href: "/dashboard/create-education" },
       ],
+    },
+    {
+      name: "Experience",
+      href: "/dashboard",
+      icon: <MdCastForEducation />,
+      children: [
+        { name: "Expererience", href: "/dashboard/experience" },
+        { name: "Create Experience", href: "/dashboard/create-experience" },
+      ],
+    },
+    {
+      name: "Skills",
+      href: "/dashboard",
+      icon: <GiSkills />,
+      children: [{ name: "Create Skills", href: "/dashboard/create-skills" }],
     },
   ];
 

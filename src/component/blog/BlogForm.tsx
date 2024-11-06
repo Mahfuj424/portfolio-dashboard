@@ -34,17 +34,17 @@ export default function BlogForm({ onSubmit, initialData }: RoomFormProps) {
     }
   }, [initialData]);
 
+  const handleImageRemove = () => {
+    setImageFile(null);
+    setImageUrl(null);
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImageFile(file);
       setImageUrl(URL.createObjectURL(file)); // Set preview for newly uploaded file
     }
-  };
-
-  const handleImageRemove = () => {
-    setImageFile(null);
-    setImageUrl(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

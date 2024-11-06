@@ -53,7 +53,7 @@ const AllBlogPage = () => {
     } catch (error: any) {
       toast.error(error?.message || "Error deleting post.");
     } finally {
-      setIsModalOpen(false);
+      setIsDeleteModalOpen(false);
       setPostIdToDelete(null);
     }
   };

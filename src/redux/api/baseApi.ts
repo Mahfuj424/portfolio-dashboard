@@ -5,7 +5,7 @@ import { tagTypeList } from "../tagTypes";
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://localhost:5000/api/v1`,
+    baseUrl: `https://portfolio-backend-eight-black.vercel.app/api/v1`,
   }),
   endpoints: () => ({}),
   tagTypes: tagTypeList,
